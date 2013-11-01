@@ -30,6 +30,7 @@ fi
 # Create user account with sudo access and force password change
 # on initial login
 adduser $USER
+echo $USER | passwd $USER --stdin
 chage -d 0 $USER
 echo "$USER ALL=(ALL) ALL" >> /etc/sudoers
 alert "Created account for $USER"
