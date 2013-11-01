@@ -8,6 +8,7 @@ This script will setup a rackspace centos server by installing/configuring commo
 Usage:
 
 	yum -y -q install git
+	git clone https://github.com/jtnelson/centos-server-setup.git
 	cd centos-server-setup
 	./setup_centos.sh <username>
 
