@@ -34,13 +34,10 @@ chage -d 0 $USER
 echo "$USER ALL=(ALL) ALL" >> /etc/sudoers
 alert "Created account for $USER"
 
-# Change the server name
-SERVER_NAME=`hostname`
-sed -i 's/#ServerName www\.example\.com:80/ServerName $SERVER_NAME\.com/g' /etc/httpd/conf/httpd.conf
-alert "Changed the server name to $SERVER_NAME"
-
 # Install apache2 and mod-ssl, make sure apache starts and boot time and open port 80
 yum -y -q install httpd mod_ssl
+SERVER_NAME=`hostname`
+sed -i 's/#ServerName www\.example\.com:80/ServerName $SERVER_NAME\.com/g' /etc/httpd/conf/httpd.conf
 chkconfig --levels 2345 httpd on
 service httpd start
 iptables -I INPUT -p tcp --dport 80 -j ACCEPT
@@ -59,7 +56,8 @@ alert "Installed PHP"
 # Install memcached
 yum -y -q install memcached
 chkconfig --level 2345 memcached on
-iptables -I INPUT -p tcp --dport 11211 -j ACCEPT OR iptables -I INPUT -i eth1 -p tcp --dport 11211 -j ACCEPT
+iptables -I INPUT -p tcp --dport 11211 -j ACCEPT
+iptables -I INPUT -i eth1 -p tcp --dport 11211 -j ACCEPT
 service iptables save
 alert "Installed memcached"
 
@@ -91,9 +89,9 @@ service httpd restart
 alert "Installed phpMyAdmin"
 
 # Install nfs and rcpbind
-yum -y install nfs-utils nfs-utils-lib
+yum -y -q install nfs-utils nfs-utils-lib
 service rpcbind start
-service ifs start
+service nfs start
 chkconfig --levels 2345 nfs on
 chkconfig --levels 2345 rpcbind on
 alert "Installed nfs and rpcbind"
