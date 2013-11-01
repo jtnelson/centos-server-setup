@@ -16,6 +16,16 @@ alert (){
 	fi
 }
 
+die (){
+	MSG=$1
+	echo "ERROR: $MSG" > &2
+	exit 127
+}
+
+if [ -z $USER ]; then
+	die "Please specify a username"
+fi
+
 # Create user account with sudo access and force password change
 # on initial login
 adduser $USER
@@ -70,7 +80,7 @@ alert "Set mysql root password to $PASSWORD"
 # Install phpMyAdmin
 wget -q http://packages.sw.be/rpmforge-release/rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm
 wget -c -q http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/3.4.9/phpMyAdmin-3.4.9-english.tar.gz
-tar xvfx phpMyAdmin*
+tar xf phpMyAdmin*
 mv phpMyAdmin-3.4.9-english /usr/share/phpmyadmin
 cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php
 sed -i 's/'\''cookie'\''/'\''http'\''/g' /usr/share/phpmyadmin/config.inc.php
