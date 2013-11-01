@@ -7,6 +7,7 @@
 #########################################
 
 USER=$1
+trap 'echo interrupted; exit' INT
 
 # Send an alert if the previous command exited with 0 status
 alert (){
@@ -81,6 +82,8 @@ alert "Set mysql root password to $PASSWORD"
 wget -q http://packages.sw.be/rpmforge-release/rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm
 wget -c -q http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/3.4.9/phpMyAdmin-3.4.9-english.tar.gz
 tar xf phpMyAdmin*
+rm phpMyAdmin-3.4.9-english.tar.gz
+rm rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm
 mv phpMyAdmin-3.4.9-english /usr/share/phpmyadmin
 cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php
 sed -i 's/'\''cookie'\''/'\''http'\''/g' /usr/share/phpmyadmin/config.inc.php
@@ -94,6 +97,8 @@ service ifs start
 chkconfig --levels 2345 nfs on
 chkconfig --levels 2345 rpcbind on
 alert "Installed nfs and rpcbind"
+
+exit 0
 
 
 
