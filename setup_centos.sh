@@ -19,7 +19,7 @@ alert (){
 
 die (){
 	MSG=$1
-	echo "ERROR: $MSG" > &2
+	echo "ERROR: $MSG" >&2
 	exit 127
 }
 
