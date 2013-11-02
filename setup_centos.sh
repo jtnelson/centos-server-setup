@@ -43,10 +43,11 @@ chkconfig --levels 2345 httpd on
 service httpd start
 iptables -I INPUT -p tcp --dport 80 -j ACCEPT
 service iptables save
+chown -R apache /var/www/html/
 alert "Installed Apache with mod-ssl enabled"
 
 # Install the latest version of JAVA (openjdk)
-yum -y -q install java-1.7.0-openjdk
+yum -y -q install java-1.7.0-openjdk java-1.7.0-openjdk-devel.x86_64
 export JAVA_HOME=/usr/lib/jvm/jre/
 alert "Installed Java"
 
@@ -73,7 +74,7 @@ service mysqld start
 alert "Installed mysql"
 
 # Set root password for mysql
-PASSWORD=`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;`
+PASSWORD=`openssl rand -base64 32 | cut -c1-20`
 mysqladmin -u root password $PASSWORD
 alert "Set mysql root password to $PASSWORD"
 
@@ -86,6 +87,7 @@ rm rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm
 mv phpMyAdmin-3.4.9-english /usr/share/phpmyadmin
 cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php
 sed -i 's/'\''cookie'\''/'\''http'\''/g' /usr/share/phpmyadmin/config.inc.php
+echo "Alias /phpmyadmin /usr/share/phpmyadmin" >> /etc/httpd/conf/httpd.conf
 service httpd restart
 alert "Installed phpMyAdmin"
 
