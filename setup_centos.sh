@@ -75,6 +75,7 @@ alert "Installed mysql"
 
 # Set root password for mysql
 PASSWORD=`openssl rand -base64 32 | cut -c1-20`
+echo $PASSWORD > .mysqlrootpass
 mysqladmin -u root password $PASSWORD
 alert "Set mysql root password to $PASSWORD"
 
