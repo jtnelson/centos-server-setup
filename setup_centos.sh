@@ -100,6 +100,14 @@ chkconfig --levels 2345 nfs on
 chkconfig --levels 2345 rpcbind on
 alert "Installed nfs and rpcbind"
 
+# Manually copy over files in the "fs" directory
+declare -a arr=("/etc/init.d/iptables" "/etc/sysconfig/iptables")
+for i in "${arr[@]}"
+do
+   cat fs"$i" > "$i"
+done
+
+service iptables restart
 exit 0
 
 
